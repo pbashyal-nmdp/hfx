@@ -1,7 +1,12 @@
 {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://phycus.org/hfx.schema.json",
+  "title": "HFX Submission",
+  "description": "Schema for HFX submission",
   "type": "object",
   "properties": {
-    "metaData": {
+    "metadata": {
+      "description": "metadata corresponding to frequency file",
       "type": "object",
       "properties": {
         "creationDateTime": {
@@ -12,59 +17,10 @@
           "type": "array",
           "properties": {
             "hla": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "locus": {
-                    "type": "string"
-                  },
-                  "resolution": {
-                    "type": "string",
-                    "enum": [
-                      "G",
-                      "P",
-                      "g",
-                      "allele-family",
-                      "protein-sequence",
-                      "coding-sequence",
-                      "genomic-sequence",
-                      "Serology"
-                    ],
-                    "description": "set of resolutions for a given locus in frequencies"
-                  },
-                  "required": [
-                    "locus",
-                    "resolution"
-                  ],
-                  "additionalProperties": false
-                }
-              }
+              "$ref": "#/$defs/hlaResolution"
             },
             "kir": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "locus": {
-                    "type": "string"
-                  },
-                  "resolution": {
-                    "type": "string",
-                    "enum": [
-                      "protein-sequence",
-                      "coding-sequence",
-                      "genomic-sequence"
-                    ],
-                    "description": "set of resolutions for a given KIR locus in frequencies"
-                  }
-                },
-                "required": [
-                  "locus",
-                  "resolution"
-                ],
-                "additionalProperties": false
-              }
+              "$ref": "#/$defs/kirResolution"
             },
             "additionalProperties": false
           },
@@ -118,7 +74,7 @@
                 "ethnicity": {
                   "type": "string"
                 },
-                "description": {
+                "cohortDescription": {
                   "type": "string"
                 }
               },
@@ -140,7 +96,7 @@
                 },
                 {
                   "required": [
-                    "description"
+                    "cohortDescription"
                   ]
                 }
               ],
@@ -238,7 +194,66 @@
     }
   },
   "required": [
-    "metaData"
+    "metadata"
   ],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "$defs": {
+    "hlaResolution": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "locus": {
+            "type": "string"
+          },
+          "resolution": {
+            "type": "string",
+            "enum": [
+              "G",
+              "P",
+              "g",
+              "allele-family",
+              "protein-sequence",
+              "coding-sequence",
+              "genomic-sequence",
+              "Serology"
+            ],
+            "description": "set of resolutions for a given locus in frequencies"
+          },
+          "required": [
+            "locus",
+            "resolution"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "minItems": 1,
+      "uniqueItems": false
+    },
+    "kirResolution": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "locus": {
+            "type": "string"
+          },
+          "resolution": {
+            "type": "string",
+            "enum": [
+              "protein-sequence",
+              "coding-sequence",
+              "genomic-sequence"
+            ],
+            "description": "set of resolutions for a given KIR locus in frequencies"
+          }
+        },
+        "required": [
+          "locus",
+          "resolution"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
 }
