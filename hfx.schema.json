@@ -14,16 +14,14 @@
           "format": "date-time"
         },
         "outputResolution": {
-          "type": "array",
-          "properties": {
-            "hla": {
+          "oneOf": [
+            {
               "$ref": "#/$defs/hlaResolution"
             },
-            "kir": {
+            {
               "$ref": "#/$defs/kirResolution"
-            },
-            "additionalProperties": false
-          },
+            }
+          ],
           "description": "an array of locus, resolution pairs which allows these to be different at each locus"
         },
         "hfeMethod": {
