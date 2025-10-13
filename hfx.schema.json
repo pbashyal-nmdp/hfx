@@ -21,143 +21,27 @@
             {
               "$ref": "#/$defs/kirResolution"
             }
-          ],
-          "description": "an array of locus, resolution pairs which allows these to be different at each locus"
+          ]
         },
         "hfeMethod": {
-          "type": "object",
-          "properties": {
-            "method": {
-              "type": "string"
-            },
-            "parameters": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "parameter": {
-                    "type": "string"
-                  },
-                  "value": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "parameter",
-                  "value"
-                ],
-                "additionalProperties": false
-              }
-            }
-          },
-          "required": [
-            "method",
-            "parameters"
-          ],
-          "additionalProperties": false
+          "$ref": "#/$defs/hfeMethod"
         },
         "cohortDescription": {
-          "type": "object",
-          "properties": {
-            "population": {
-              "type": "object",
-              "properties": {
-                "species": {
-                  "type": "string",
-                  "description": "The species the Hf set is based on"
-                },
-                "geoCode": {
-                  "type": "string"
-                },
-                "ethnicity": {
-                  "type": "string"
-                },
-                "cohortDescription": {
-                  "type": "string"
-                }
-              },
-              "anyOf": [
-                {
-                  "required": [
-                    "species"
-                  ]
-                },
-                {
-                  "required": [
-                    "geoCode"
-                  ]
-                },
-                {
-                  "required": [
-                    "ethnicity"
-                  ]
-                },
-                {
-                  "required": [
-                    "cohortDescription"
-                  ]
-                }
-              ],
-              "additionalProperties": false
-            },
-            "inputSize": {
-              "type": "number"
-            },
-            "dataSource": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "population",
-            "inputSize"
-          ],
-          "additionalProperties": false
+          "$ref": "#/$defs/cohortDescription"
         },
         "nomenclatureUsed": {
-          "type": "object",
-          "properties": {
-            "kind": {
-              "type": "string",
-              "enum": [
-                "imgt",
-                "ipd"
-              ]
-            },
-            "version": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "kind",
-            "version"
-          ],
-          "additionalProperties": false
+          "$ref": "#/$defs/nomenclatureUsed"
         },
         "submitter": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string"
-            },
-            "organisation": {
-              "type": "string"
-            },
-            "email": {
-              "type": "string",
-              "format": "email"
-            }
-          },
-          "required": [],
-          "additionalProperties": false
+          "$ref": "#/$defs/submitter"
+        },
+        "frequencyLocation": {
+          "$ref": "#/$defs/frequencyLocation"
         },
         "checkSum": {
           "type": "string",
           "pattern": "^[a-fA-F0-9]{32}$",
           "description": "MD5 checksum represented as a 32-character hexadecimal string."
-        },
-        "frequencyLocation": {
-          "string": "",
-          "description": "either inline or a URI"
         }
       },
       "required": [
@@ -169,26 +53,7 @@
       "additionalProperties": false
     },
     "frequencyData": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "haplotype": {
-            "type": "string",
-            "pattern": "^[gA-Z-~*:0-9\\.;>\\[\\]]*$",
-            "description": "haplotype in glstring format"
-          },
-          "frequency": {
-            "type": "number",
-            "format": "int64"
-          }
-        },
-        "required": [
-          "haplotype",
-          "frequency"
-        ],
-        "additionalProperties": false
-      }
+      "$ref": "#/$defs/frequencyData"
     }
   },
   "required": [
@@ -197,6 +62,7 @@
   "additionalProperties": false,
   "$defs": {
     "hlaResolution": {
+      "description": "an array of HLA locus and resolution pairs",
       "type": "array",
       "items": {
         "type": "object",
@@ -229,6 +95,7 @@
       "uniqueItems": false
     },
     "kirResolution": {
+      "description": "an array of KIR locus and resolution pairs",
       "type": "array",
       "items": {
         "type": "object",
@@ -252,6 +119,172 @@
         ],
         "additionalProperties": false
       }
+    },
+    "hfeMethod": {
+      "description": "Method of HFE generation",
+      "type": "object",
+      "properties": {
+        "method": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "parameter": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "parameter",
+              "value"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "method",
+        "parameters"
+      ],
+      "additionalProperties": false
+    },
+    "cohortDescription": {
+      "description": "Description of the Cohort",
+      "type": "object",
+      "properties": {
+        "population": {
+          "type": "object",
+          "properties": {
+            "species": {
+              "type": "string",
+              "description": "The species the Hf set is based on"
+            },
+            "geoCode": {
+              "type": "string"
+            },
+            "ethnicity": {
+              "type": "string"
+            },
+            "cohortDescription": {
+              "type": "string"
+            }
+          },
+          "anyOf": [
+            {
+              "required": [
+                "species"
+              ]
+            },
+            {
+              "required": [
+                "geoCode"
+              ]
+            },
+            {
+              "required": [
+                "ethnicity"
+              ]
+            },
+            {
+              "required": [
+                "cohortDescription"
+              ]
+            }
+          ],
+          "additionalProperties": false
+        },
+        "inputSize": {
+          "type": "number"
+        },
+        "dataSource": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "population",
+        "inputSize"
+      ],
+      "additionalProperties": false
+    },
+    "nomenclatureUsed": {
+      "description": "IMGT/IPD Nomenclature for HFE",
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "imgt",
+            "ipd"
+          ]
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "version"
+      ],
+      "additionalProperties": false
+    },
+    "submitter": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "organisation": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "frequencyData": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "haplotype": {
+            "type": "string",
+            "pattern": "^[gA-Z-~*:0-9\\.;>\\[\\]]*$",
+            "description": "haplotype in glstring format"
+          },
+          "frequency": {
+            "type": "number",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "haplotype",
+          "frequency"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "frequencyLocation": {
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "uri"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "inline"
+          ]
+        }
+      ],
+      "description": "Frequency is either inlined or available at the given URI"
     }
   }
 }
