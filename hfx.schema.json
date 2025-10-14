@@ -1,7 +1,12 @@
 {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://phycus.org/hfx.schema.json",
+  "title": "HFX Submission",
+  "description": "Schema for HFX submission",
   "type": "object",
   "properties": {
-    "metaData": {
+    "metadata": {
+      "description": "metadata corresponding to frequency file",
       "type": "object",
       "properties": {
         "creationDateTime": {
@@ -9,201 +14,34 @@
           "format": "date-time"
         },
         "outputResolution": {
-          "type": "array",
-          "properties": {
-            "hla": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "locus": {
-                    "type": "string"
-                  },
-                  "resolution": {
-                    "type": "string",
-                    "enum": [
-                      "G",
-                      "P",
-                      "g",
-                      "allele-family",
-                      "protein-sequence",
-                      "coding-sequence",
-                      "genomic-sequence",
-                      "Serology"
-                    ],
-                    "description": "set of resolutions for a given locus in frequencies"
-                  },
-                  "required": [
-                    "locus",
-                    "resolution"
-                  ],
-                  "additionalProperties": false
-                }
-              }
+          "oneOf": [
+            {
+              "$ref": "#/$defs/hlaResolution"
             },
-            "kir": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "locus": {
-                    "type": "string"
-                  },
-                  "resolution": {
-                    "type": "string",
-                    "enum": [
-                      "protein-sequence",
-                      "coding-sequence",
-                      "genomic-sequence"
-                    ],
-                    "description": "set of resolutions for a given KIR locus in frequencies"
-                  }
-                },
-                "required": [
-                  "locus",
-                  "resolution"
-                ],
-                "additionalProperties": false
-              }
-            },
-            "additionalProperties": false
-          },
-          "description": "an array of locus, resolution pairs which allows these to be different at each locus"
+            {
+              "$ref": "#/$defs/kirResolution"
+            }
+          ]
         },
         "hfeMethod": {
-          "type": "object",
-          "properties": {
-            "method": {
-              "type": "string"
-            },
-            "parameters": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "parameter": {
-                    "type": "string"
-                  },
-                  "value": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "parameter",
-                  "value"
-                ],
-                "additionalProperties": false
-              }
-            }
-          },
-          "required": [
-            "method",
-            "parameters"
-          ],
-          "additionalProperties": false
+          "$ref": "#/$defs/hfeMethod"
         },
         "cohortDescription": {
-          "type": "object",
-          "properties": {
-            "population": {
-              "type": "object",
-              "properties": {
-                "species": {
-                  "type": "string",
-                  "description": "The species the Hf set is based on"
-                },
-                "geoCode": {
-                  "type": "string"
-                },
-                "ethnicity": {
-                  "type": "string"
-                },
-                "description": {
-                  "type": "string"
-                }
-              },
-              "anyOf": [
-                {
-                  "required": [
-                    "species"
-                  ]
-                },
-                {
-                  "required": [
-                    "geoCode"
-                  ]
-                },
-                {
-                  "required": [
-                    "ethnicity"
-                  ]
-                },
-                {
-                  "required": [
-                    "description"
-                  ]
-                }
-              ],
-              "additionalProperties": false
-            },
-            "inputSize": {
-              "type": "number"
-            },
-            "dataSource": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "population",
-            "inputSize"
-          ],
-          "additionalProperties": false
+          "$ref": "#/$defs/cohortDescription"
         },
         "nomenclatureUsed": {
-          "type": "object",
-          "properties": {
-            "kind": {
-              "type": "string",
-              "enum": [
-                "imgt",
-                "ipd"
-              ]
-            },
-            "version": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "kind",
-            "version"
-          ],
-          "additionalProperties": false
+          "$ref": "#/$defs/nomenclatureUsed"
         },
         "submitter": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string"
-            },
-            "organisation": {
-              "type": "string"
-            },
-            "email": {
-              "type": "string",
-              "format": "email"
-            }
-          },
-          "required": [],
-          "additionalProperties": false
+          "$ref": "#/$defs/submitter"
+        },
+        "frequencyLocation": {
+          "$ref": "#/$defs/frequencyLocation"
         },
         "checkSum": {
           "type": "string",
           "pattern": "^[a-fA-F0-9]{32}$",
           "description": "MD5 checksum represented as a 32-character hexadecimal string."
-        },
-        "frequencyLocation": {
-          "string": "",
-          "description": "either inline or a URI"
         }
       },
       "required": [
@@ -212,6 +50,203 @@
         "cohortDescription",
         "nomenclatureUsed"
       ],
+      "additionalProperties": false
+    },
+    "frequencyData": {
+      "$ref": "#/$defs/frequencyData"
+    }
+  },
+  "required": [
+    "metadata"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "hlaResolution": {
+      "description": "an array of HLA locus and resolution pairs",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "locus": {
+            "type": "string"
+          },
+          "resolution": {
+            "type": "string",
+            "enum": [
+              "G",
+              "P",
+              "g",
+              "allele-family",
+              "protein-sequence",
+              "coding-sequence",
+              "genomic-sequence",
+              "Serology"
+            ],
+            "description": "set of resolutions for a given locus in frequencies"
+          },
+          "required": [
+            "locus",
+            "resolution"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "minItems": 1,
+      "uniqueItems": false
+    },
+    "kirResolution": {
+      "description": "an array of KIR locus and resolution pairs",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "locus": {
+            "type": "string"
+          },
+          "resolution": {
+            "type": "string",
+            "enum": [
+              "protein-sequence",
+              "coding-sequence",
+              "genomic-sequence"
+            ],
+            "description": "set of resolutions for a given KIR locus in frequencies"
+          }
+        },
+        "required": [
+          "locus",
+          "resolution"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "hfeMethod": {
+      "description": "Method of HFE generation",
+      "type": "object",
+      "properties": {
+        "method": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "parameter": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "parameter",
+              "value"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "method",
+        "parameters"
+      ],
+      "additionalProperties": false
+    },
+    "cohortDescription": {
+      "description": "Description of the Cohort",
+      "type": "object",
+      "properties": {
+        "population": {
+          "type": "object",
+          "properties": {
+            "species": {
+              "type": "string",
+              "description": "The species the Hf set is based on"
+            },
+            "geoCode": {
+              "type": "string"
+            },
+            "ethnicity": {
+              "type": "string"
+            },
+            "cohortDescription": {
+              "type": "string"
+            }
+          },
+          "anyOf": [
+            {
+              "required": [
+                "species"
+              ]
+            },
+            {
+              "required": [
+                "geoCode"
+              ]
+            },
+            {
+              "required": [
+                "ethnicity"
+              ]
+            },
+            {
+              "required": [
+                "cohortDescription"
+              ]
+            }
+          ],
+          "additionalProperties": false
+        },
+        "inputSize": {
+          "type": "number"
+        },
+        "dataSource": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "population",
+        "inputSize"
+      ],
+      "additionalProperties": false
+    },
+    "nomenclatureUsed": {
+      "description": "IMGT/IPD Nomenclature for HFE",
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "imgt",
+            "ipd"
+          ]
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "version"
+      ],
+      "additionalProperties": false
+    },
+    "submitter": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "organisation": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        }
+      },
+      "required": [],
       "additionalProperties": false
     },
     "frequencyData": {
@@ -235,10 +270,21 @@
         ],
         "additionalProperties": false
       }
+    },
+    "frequencyLocation": {
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "uri"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "inline"
+          ]
+        }
+      ],
+      "description": "Frequency is either inlined or available at the given URI"
     }
-  },
-  "required": [
-    "metaData"
-  ],
-  "additionalProperties": false
+  }
 }
