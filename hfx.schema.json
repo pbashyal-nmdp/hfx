@@ -32,8 +32,8 @@
         "nomenclatureUsed": {
           "$ref": "#/$defs/nomenclatureUsed"
         },
-        "submitter": {
-          "$ref": "#/$defs/submitter"
+        "producer": {
+          "$ref": "#/$defs/producer"
         },
         "frequencyLocation": {
           "$ref": "#/$defs/frequencyDataLocation"
