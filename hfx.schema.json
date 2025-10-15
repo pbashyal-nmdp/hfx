@@ -36,7 +36,7 @@
           "$ref": "#/$defs/submitter"
         },
         "frequencyLocation": {
-          "$ref": "#/$defs/frequencyLocation"
+          "$ref": "#/$defs/frequencyDataLocation"
         },
         "checkSum": {
           "type": "string",
@@ -48,7 +48,8 @@
         "outputResolution",
         "hfeMethod",
         "cohortDescription",
-        "nomenclatureUsed"
+        "nomenclatureUsed",
+        "frequencyLocation"
       ],
       "additionalProperties": false
     },
@@ -153,100 +154,165 @@
       ],
       "additionalProperties": false
     },
-    "cohortDescription": {
+    "cohort": {
       "description": "Description of the Cohort",
       "type": "object",
       "properties": {
+        "species": {
+          "type": "string",
+          "description": "The species the Hf set is based on"
+        },
         "population": {
-          "type": "object",
+          "type": "array",
+          "description": "Population Details",
+          "items": {
+            "type": "object",
+      
           "properties": {
-            "species": {
+            "name": {
               "type": "string",
-              "description": "The species the Hf set is based on"
+              "description": "Short population name/code"
             },
-            "geoCode": {
-              "type": "string"
+            "geoLocation": {
+              "type": "object",
+              "properties": {
+                "ISO3166" : {
+                  "type": "string",
+                  "description": "https://en.wikipedia.org/wiki/ISO_3166-2 and 3166-1"
+                },
+                "subdivision" : {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": "string",
+                      "description": "Name of State/Province"
+                    }
+                  },
+                  "description": "Subdivision of or collection of subdivision of ISO_3166-1/2"
+                },
+                "latitude": {
+                  "type": "string",
+                  "description": "latitude degrees 2 left of decimal ISO 6709"
+                },
+                "longitude": {
+                  "type": "string",
+                  "description": "longitude degrees 3 less than decimal ISO 6709"
+                },
+                "required": [
+                  "ISO3166"
+                ]
+              }
             },
             "ethnicity": {
-              "type": "string"
+              "type": "string",
+              "description": "Optional ancestry label"
             },
-            "cohortDescription": {
-              "type": "string"
+            "populationDescription": {
+              "type": "string",
+              "description": "Description of the cohort population"
+            },
+            "populationSize": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "description": "Size of this population in the sample"
+            },
+            "language": {
+              "type": "string",
+              "description": "spoken language of the population, https://www.ethnologue.com/codes/"
+            },
+            "religion": {
+              "type": "string",
+              "description": "Religion of population"
             }
-          },
-          "anyOf": [
-            {
-              "required": [
-                "species"
-              ]
             },
-            {
-              "required": [
-                "geoCode"
-              ]
-            },
-            {
-              "required": [
-                "ethnicity"
-              ]
-            },
-            {
-              "required": [
-                "cohortDescription"
-              ]
-            }
+
+          "required": [
+            "name",
+            "geoLocation"
           ],
-          "additionalProperties": false
+          "additionalProperties": true
+          }
+          }
         },
-        "inputSize": {
-          "type": "number"
+        "cohortSize": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "description": "Number of individuals (N) in the sample to produce frequency"
         },
         "dataSource": {
-          "type": "string"
+          "type": "string",
+          "description": "Origin of data when generating frequency. Registry, clinic, etc.."
         }
       },
       "required": [
+        "species",
         "population",
-        "inputSize"
+        "cohortSize"
       ],
       "additionalProperties": false
     },
-    "nomenclatureUsed": {
-      "description": "IMGT/IPD Nomenclature for HFE",
+    "nomenclature": {
+      "description": "Nomenclature used to produce frequencies",
       "type": "object",
       "properties": {
-        "kind": {
+        "database": {
           "type": "string",
           "enum": [
-            "imgt",
-            "ipd"
-          ]
+            "IPD-IMGT/HLA",
+            "IPD-KIR",
+            "IPD-MHC",
+            "IPD-NHKIR"
+          ],
+          "description": "IPD main groups"
+        },
+        "group": {
+          "type": "string",
+          "description": "Groups such as NHP, DLA, FISH etc.."
         },
         "version": {
-          "type": "string"
+          "type": "string",
+          "description": "Version of the IPD database"
         }
       },
       "required": [
-        "kind",
+        "database",
         "version"
       ],
       "additionalProperties": false
     },
-    "submitter": {
+    "producer": {
       "type": "object",
+      "description": "Individual or Organization submitting the frequency data",
       "properties": {
         "name": {
-          "type": "string"
+          "type": "string",
+          "description": "Name of Individual/Group producing the frequency data"
         },
         "organisation": {
-          "type": "string"
+          "type": "string",
+          "description": "Name of Organization producing the frequency data"
         },
         "email": {
           "type": "string",
-          "format": "email"
+          "format": "email",
+          "description": "Contact email for the producer"
+        },
+        "publication": {
+          "type": "object",
+          "properties": {
+            "doi": {
+              "type": "string",
+              "description": "DOI of the publication"
+            },
+            "year": {
+              "type": "date",
+              "description": "Date of publication"
+            }
+          }
         }
       },
-      "required": [],
+      "required": ["name", "organisation", "email"],
       "additionalProperties": false
     },
     "frequencyData": {
@@ -257,11 +323,11 @@
           "haplotype": {
             "type": "string",
             "pattern": "^[gA-Z-~*:0-9\\.;>\\[\\]]*$",
-            "description": "haplotype in glstring format"
+            "description": "haplotype in GL String format"
           },
           "frequency": {
             "type": "number",
-            "format": "int64"
+            "description": "Frequency of the haplotype"
           }
         },
         "required": [
@@ -271,7 +337,7 @@
         "additionalProperties": false
       }
     },
-    "frequencyLocation": {
+    "frequencyDataLocation": {
       "oneOf": [
         {
           "type": "string",
@@ -287,4 +353,3 @@
       "description": "Frequency is either inlined or available at the given URI"
     }
   }
-}
