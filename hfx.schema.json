@@ -35,7 +35,7 @@
         "producer": {
           "$ref": "#/$defs/producer"
         },
-        "frequencyLocation": {
+        "frequencyDataLocation": {
           "$ref": "#/$defs/frequencyDataLocation"
         },
         "license": {
@@ -52,7 +52,7 @@
         "hfeMethod",
         "cohortDescription",
         "nomenclatureUsed",
-        "frequencyLocation"
+        "frequencyDataLocation"
       ],
       "additionalProperties": false
     },
@@ -163,7 +163,7 @@
       "properties": {
         "species": {
           "type": "string",
-          "description": "The species the Hf set is based on"
+          "description": "Species as defined in https://www.ebi.ac.uk/ena/ i.e. https://www.ebi.ac.uk/ena/browser/view/Taxon:9606 for 'human'"
         },
         "population": {
           "type": "array",
@@ -267,10 +267,6 @@
             "IPD-NHKIR"
           ],
           "description": "IPD main groups"
-        },
-        "group": {
-          "type": "string",
-          "description": "Groups identified on the https://www.ebi.ac.uk/ipd/mhc/ and https://www.ebi.ac.uk/ipd/nhkir/ web pages."
         },
         "version": {
           "type": "string",
